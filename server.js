@@ -215,7 +215,7 @@ async function initializeNFTPacks() {
   const nftData = [
     { 
       title: "Good Pack", 
-      price: 100, 
+      price: 50, 
       id: 1, 
       negative: "Evil Expression, Scowl, Frown, No beard,Sarcastic Smile,blurry images", 
       keywords: "Cartoon, Exagerated,Handsome, Beautiful, Detailed Animation, Animated, No Background, Black Background, Happy, Long hair, Always bearded",
@@ -224,7 +224,7 @@ async function initializeNFTPacks() {
     },
     { 
       title: "Evil Pack", 
-      price: 150, 
+      price: 50, 
       id: 2, 
       negative: "Good Expression, Smile, blurry images", 
       keywords: "Evil ,Cartoon, Exagerated,Handsome, Beautiful, Detailed Animation, Animated, No Background, Black Background, Happy, Long hair, Always bearded, Sarcastic smile",
@@ -232,23 +232,41 @@ async function initializeNFTPacks() {
       altText: "Evil Pack NFT"
     },
     {
-      title: "Ethereum Pack",
-      price: 200,
-      id: 3,
-      negative: "Bitcoin symbols, Dollar signs, Confusion, Blurry images",
-      keywords: "Ethereum, ETH, Cryptocurrency, Blockchain, Smart Contracts, Decentralized, Vitalik Buterin, Animated, No Background, Detailed Illustration, Futuristic, Tech",
-      imageUrl: "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837803/jcqlnfvtjsvzlah4filf.jpg",
-      altText: "Ethereum Pack NFT"
-    },
-    {
-      title: "Bitcoin Pack",
-      price: 200,
-      id: 4,
-      negative: "Ethereum symbols, Bank buildings, Paper money, Blurry images",
-      keywords: "Bitcoin, BTC, Cryptocurrency, Blockchain, Satoshi Nakamoto, Digital Gold, Animated, No Background, Detailed Illustration, Decentralized, Finance, Mining",
-      imageUrl: "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837804/bqmtrtvckxfqf4sad6aq.jpg",
-      altText: "Bitcoin Pack NFT"
-    }
+    "title": "Prince Pack",
+    "price": 180,
+    "id": 5,
+    "negative": "Princess elements, feminine features, blurry images, realistic, photograph",
+    "keywords": "Cartoon sticker, handsome prince character, royal attire, crown, sword, noble pose, charming smile, detailed 2D animation style, fairytale castle background, no background option, transparent, vibrant colors, heroic gestures, majestic aura",
+    "imageUrl": "placeholder_url_for_prince_pack",
+    "altText": "Prince Pack NFT Sticker"
+  },
+  {
+    "title": "Princess Pack",
+    "price": 180,
+    "id": 6,
+    "negative": "Prince elements, masculine features, blurry images, realistic, photograph",
+    "keywords": "Cartoon sticker, beautiful princess character, elegant gown, tiara, magic wand, graceful pose, enchanting smile, detailed 2D animation style, fairytale castle background, no background option, transparent, pastel color palette, regal gestures, magical aura",
+    "imageUrl": "placeholder_url_for_princess_pack",
+    "altText": "Princess Pack NFT Sticker"
+  },
+     {
+    "title": "Ethereum Pack",
+    "price": 50,
+    "id": 3,
+    "negative": "Bitcoin symbols, fiat currency, centralized systems, realistic photos, blurry images, confusion",
+    "keywords": "Cartoon sticker, Ethereum logo prominence, ETH symbol, cryptocurrency coin, blockchain visualization, smart contract illustration, decentralized network, animated ether particles, no background, transparent, vibrant blue and white palette, futuristic tech aesthetic, DeFi ecosystem symbols, gas fee representation, Ethereum 2.0 concept",
+    "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837803/jcqlnfvtjsvzlah4filf.jpg",
+    "altText": "Ethereum Cryptocurrency Sticker Pack"
+  },
+  {
+    "title": "Bitcoin Pack",
+    "price": 50,
+    "id": 4,
+    "negative": "Ethereum symbols, fiat currency, centralized banking, realistic photos, blurry images, bearish trends",
+    "keywords": "Cartoon sticker, Bitcoin logo dominance, BTC symbol, cryptocurrency coin, blockchain structure, mining concept illustration, animated network connections, no background, transparent, vibrant orange and gold scheme, digital wallet visualization, halving event depiction, Lightning Network concept, bullish trend chart",
+    "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837804/bqmtrtvckxfqf4sad6aq.jpg",
+    "altText": "Bitcoin Cryptocurrency Sticker Pack"
+  }
   ];
 
   try {
