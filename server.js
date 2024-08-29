@@ -233,20 +233,20 @@ async function initializeNFTPacks() {
     },
     {
     "title": "Prince Pack",
-    "price": 180,
+    "price": 50,
     "id": 5,
     "negative": "Princess elements, feminine features, blurry images, realistic, photograph",
     "keywords": "Cartoon sticker, handsome prince character, royal attire, crown, sword, noble pose, charming smile, detailed 2D animation style, fairytale castle background, no background option, transparent, vibrant colors, heroic gestures, majestic aura",
-    "imageUrl": "placeholder_url_for_prince_pack",
+    "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/azbycespmcz7szyralcm.jpg",
     "altText": "Prince Pack NFT Sticker"
   },
   {
     "title": "Princess Pack",
-    "price": 180,
+    "price": 50,
     "id": 6,
     "negative": "Prince elements, masculine features, blurry images, realistic, photograph",
-    "keywords": "Cartoon sticker, beautiful princess character, elegant gown, tiara, magic wand, graceful pose, enchanting smile, detailed 2D animation style, fairytale castle background, no background option, transparent, pastel color palette, regal gestures, magical aura",
-    "imageUrl": "placeholder_url_for_princess_pack",
+    "keywords": "Cartoon sticker, beautiful princess character, elegant gown, tiara, graceful pose, enchanting smile, detailed 2D animation style, fairytale castle background, no background option, transparent, pastel color palette, regal gestures, magical aura",
+    "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/mppucn34tpobdrrhwzc0.jpg",
     "altText": "Princess Pack NFT Sticker"
   },
      {
@@ -254,7 +254,7 @@ async function initializeNFTPacks() {
     "price": 50,
     "id": 3,
     "negative": "Bitcoin symbols, fiat currency, centralized systems, realistic photos, blurry images, confusion",
-    "keywords": "Cartoon sticker, Ethereum logo prominence, ETH symbol, cryptocurrency coin, blockchain visualization, smart contract illustration, decentralized network, animated ether particles, no background, transparent, vibrant blue and white palette, futuristic tech aesthetic, DeFi ecosystem symbols, gas fee representation, Ethereum 2.0 concept",
+    "keywords": "Cartoon sticker, Ethereum logo prominence, Black and White ,ETH symbol, cryptocurrency coin, blockchain visualization, smart contract illustration, decentralized network, animated ether particles, no background, transparent, vibrant blue and white palette, futuristic tech aesthetic, DeFi ecosystem symbols, gas fee representation, Ethereum 2.0 concept",
     "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837803/jcqlnfvtjsvzlah4filf.jpg",
     "altText": "Ethereum Cryptocurrency Sticker Pack"
   },
@@ -263,7 +263,7 @@ async function initializeNFTPacks() {
     "price": 50,
     "id": 4,
     "negative": "Ethereum symbols, fiat currency, centralized banking, realistic photos, blurry images, bearish trends",
-    "keywords": "Cartoon sticker, Bitcoin logo dominance, BTC symbol, cryptocurrency coin, blockchain structure, mining concept illustration, animated network connections, no background, transparent, vibrant orange and gold scheme, digital wallet visualization, halving event depiction, Lightning Network concept, bullish trend chart",
+    "keywords": "Cartoon sticker, Detailed animation,Gold,Bitcoin logo dominance, BTC symbol, cryptocurrency coin, blockchain structure, mining concept illustration, animated network connections, no background, transparent, vibrant orange and gold scheme, digital wallet visualization, halving event depiction, Lightning Network concept, bullish trend chart",
     "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837804/bqmtrtvckxfqf4sad6aq.jpg",
     "altText": "Bitcoin Cryptocurrency Sticker Pack"
   }
