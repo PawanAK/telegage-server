@@ -19,7 +19,8 @@ const testConnection = mongoose.createConnection("mongodb+srv://pawanajjark:y5A6
 const UserSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  walletAddress: { type: String, unique: true, sparse: true }
+  walletAddress: { type: String, unique: true, sparse: true },
+  has_community: { type: Boolean, default: false }
 });
 
 const User = testConnection.model('User', UserSchema);
@@ -207,6 +208,28 @@ app.get('/api/decrypt-user-data/:userId', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error decrypting user data', error: error.message });
     console.error("Error decrypting user data", error);
+  }
+});
+
+// New route to update user's has_community field
+app.post('/update_user_community_status', async (req, res) => {
+  try {
+    const { walletAddress, has_community } = req.body;
+
+    const user = await User.findOneAndUpdate(
+      { walletAddress },
+      { has_community },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ message: 'User community status updated successfully', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating user community status', error: error.message });
+    console.error("Error updating user community status", error);
   }
 });
 
