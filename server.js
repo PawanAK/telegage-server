@@ -130,7 +130,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ message: 'User not found or invalid credentials' });
     }
 
-    res.json({ message: 'Login successful', userId: user._id });
+    res.json({ message: 'Login successful', userId: user._id, has_community: user.has_community });
     console.log("Login successful", user);
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error: error.message });
