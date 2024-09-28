@@ -258,6 +258,55 @@ app.post('/update_user_community_status', async (req, res) => {
   }
 });
 
+// New route to fetch communities for a wallet address
+// New route to fetch communities for a wallet address
+app.post('/api/communities', async (req, res) => {
+  try {
+    const client = new MongoClient('mongodb+srv://pawanajjark:y5A6YsqwwYrQhckO@cluster0.lixwl.mongodb.net/telegram_communities?retryWrites=true&w=majority', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    await client.connect();
+
+    const { walletAddress } = req.body;
+    console.log("Fetching communities for walletAddress:", walletAddress);
+    const coll = client.db('telegram_communities').collection('telegram_community');
+    const cursor = coll.find({ owner_id: walletAddress });
+    const communities = await cursor.toArray();
+
+    console.log("Communitiesss:", communities);
+
+    if (!communities || communities.length === 0) {
+      console.log("No communities found for walletAddress:", walletAddress);
+      return res.json([]); // Return an empty array instead of 404
+    }
+
+    const formattedCommunities = communities.map(community => ({
+      _id: community._id,
+      community_name: community.community_name,
+      category: community.category,
+      community_description: community.community_description,
+      community_rules: community.community_rules,
+      community_instructions: community.community_instructions,
+      community_id: community.community_id,
+      topics: community.topics,
+      owner_id: community.owner_id,
+      users: community.users,
+      stats: community.stats
+    }));
+
+    res.json(formattedCommunities);
+  } catch (error) {
+    console.error("Error in /api/communities:", error);
+    res.status(500).json({ 
+      message: 'Error fetching communities', 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
+});
+
 // New route to fetch community stats
 app.post('/api/community-stats', async (req, res) => {
   try {
