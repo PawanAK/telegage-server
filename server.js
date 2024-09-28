@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const crypto = require('crypto'); // Import Node.js crypto module
 require('dotenv').config();
+const { MongoClient } = require('mongodb');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -36,6 +37,23 @@ const CommunityUserSchema = new mongoose.Schema({
 });
 
 const CommunityUser = telegramCommunitiesConnection.model('CommunityUser', CommunityUserSchema, 'community_users');
+
+// Community model (in telegram_communities database)
+const CommunitySchema = new mongoose.Schema({
+  _id: { type: String },
+  category: { type: String },
+  community_description: { type: String },
+  community_id: { type: String },
+  community_instructions: { type: String },
+  community_name: { type: String },
+  community_rules: { type: String },
+  owner_id: { type: String },
+  stats: { type: String },
+  topics: [{ type: String }],
+  users: [{ type: String }]
+});
+
+const Community = telegramCommunitiesConnection.model('Community', CommunitySchema, 'communities');
 
 // NFT Pack model (in test database)
 const NFTPackSchema = new mongoose.Schema({
@@ -92,6 +110,7 @@ app.post('/api/signup', async (req, res) => {
     console.error("Error creating user", error);
   }
 });
+
 
 app.get('/api/list-databases', async (req, res) => {
   try {
@@ -239,6 +258,62 @@ app.post('/update_user_community_status', async (req, res) => {
   }
 });
 
+// New route to fetch community stats
+app.post('/api/community-stats', async (req, res) => {
+  try {
+    const { walletAddress } = req.body;
+    console.log("Fetching community stats for walletAddress:", walletAddress);
+
+    // Attempt to connect to MongoDB
+    const client = new MongoClient('mongodb+srv://pawanajjark:y5A6YsqwwYrQhckO@cluster0.lixwl.mongodb.net/telegram_communities?retryWrites=true&w=majority', {
+      serverSelectionTimeoutMS: 5000, // 5 second timeout
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    await client.connect();
+    console.log("Connected to MongoDB successfully");
+
+    const coll = client.db('telegram_communities').collection('telegram_community');
+    const cursor = coll.find({ owner_id: walletAddress });
+    const result = await cursor.toArray();
+
+    if (result.length === 0) {
+      console.log("No community found for walletAddress:", walletAddress);
+      return res.status(404).json({ message: 'No community found for this wallet address' });
+    }
+
+    const communityId = result[0].community_id;
+    console.log("Found communityId:", communityId);
+
+    // Make a request to the external API to fetch community stats
+    const response = await fetch('https://tegegageapplication.onrender.com/get_stats_by_community', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ telegram_channel_id: communityId }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`External API responded with status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Received data from external API:", data);
+    
+    await client.close();
+    res.json(data);
+  } catch (error) {
+    console.error("Error in /api/community-stats:", error);
+    res.status(500).json({ 
+      message: 'Error fetching community stats', 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
+});
+
 // Initialize NFT Packs
 async function initializeNFTPacks() {
   const nftData = [
@@ -261,42 +336,43 @@ async function initializeNFTPacks() {
       altText: "Evil Pack NFT"
     },
     {
-    "title": "Prince Pack",
-    "price": 50,
-    "id": 5,
-    "negative": "Princess elements, feminine features, blurry images, realistic, photograph",
-    "keywords": "Cartoon sticker, handsome prince character, royal attire, crown, sword, noble pose, charming smile, detailed 2D animation style, fairytale castle background, no background option, transparent, vibrant colors, heroic gestures, majestic aura",
-    "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/azbycespmcz7szyralcm.jpg",
-    "altText": "Prince Pack NFT Sticker"
-  },
-  {
-    "title": "Princess Pack",
-    "price": 50,
-    "id": 6,
-    "negative": "Prince elements, masculine features, blurry images, realistic, photograph",
-    "keywords": "Cartoon sticker, beautiful princess character, elegant gown, tiara, graceful pose, enchanting smile, detailed 2D animation style, fairytale castle background, no background option, transparent, pastel color palette, regal gestures, magical aura",
-    "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/mppucn34tpobdrrhwzc0.jpg",
-    "altText": "Princess Pack NFT Sticker"
-  },
-     {
-    "title": "Ethereum Pack",
-    "price": 50,
-    "id": 3,
-    "negative": "Bitcoin symbols, fiat currency, centralized systems, realistic photos, blurry images, confusion",
-    "keywords": "Cartoon sticker, Ethereum logo prominence, Black and White ,ETH symbol, cryptocurrency coin, blockchain visualization, smart contract illustration, decentralized network, animated ether particles, no background, transparent, vibrant blue and white palette, futuristic tech aesthetic, DeFi ecosystem symbols, gas fee representation, Ethereum 2.0 concept",
-    "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837803/jcqlnfvtjsvzlah4filf.jpg",
-    "altText": "Ethereum Cryptocurrency Sticker Pack"
-  },
-  {
-    "title": "Bitcoin Pack",
-    "price": 50,
-    "id": 4,
-    "negative": "Ethereum symbols, fiat currency, centralized banking, realistic photos, blurry images, bearish trends",
-    "keywords": "Cartoon sticker, Detailed animation,Gold,Bitcoin logo dominance, BTC symbol, cryptocurrency coin, blockchain structure, mining concept illustration, animated network connections, no background, transparent, vibrant orange and gold scheme, digital wallet visualization, halving event depiction, Lightning Network concept, bullish trend chart",
-    "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837804/bqmtrtvckxfqf4sad6aq.jpg",
-    "altText": "Bitcoin Cryptocurrency Sticker Pack"
-  }
+      "title": "Prince Pack",
+      "price": 50,
+      "id": 5,
+      "negative": "Princess elements, feminine features, blurry images, realistic, photograph",
+      "keywords": "Cartoon sticker, handsome prince character, royal attire, crown, sword, noble pose, charming smile, detailed 2D animation style, fairytale castle background, no background option, transparent, vibrant colors, heroic gestures, majestic aura",
+      "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/azbycespmcz7szyralcm.jpg",
+      "altText": "Prince Pack NFT Sticker"
+    },
+    {
+      "title": "Princess Pack",
+      "price": 50,
+      "id": 6,
+      "negative": "Prince elements, masculine features, blurry images, realistic, photograph",
+      "keywords": "Cartoon sticker, beautiful princess character, elegant gown, tiara, graceful pose, enchanting smile, detailed 2D animation style, fairytale castle background, no background option, transparent, pastel color palette, regal gestures, magical aura",
+      "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/mppucn34tpobdrrhwzc0.jpg",
+      "altText": "Princess Pack NFT Sticker"
+    },
+    {
+      "title": "Ethereum Pack",
+      "price": 50,
+      "id": 3,
+      "negative": "Bitcoin symbols, fiat currency, centralized systems, realistic photos, blurry images, confusion",
+      "keywords": "Cartoon sticker, Ethereum logo prominence, Black and White ,ETH symbol, cryptocurrency coin, blockchain visualization, smart contract illustration, decentralized network, animated ether particles, no background, transparent, vibrant blue and white palette, futuristic tech aesthetic, DeFi ecosystem symbols, gas fee representation, Ethereum 2.0 concept",
+      "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837803/jcqlnfvtjsvzlah4filf.jpg",
+      "altText": "Ethereum Cryptocurrency Sticker Pack"
+    },
+    {
+      "title": "Bitcoin Pack",
+      "price": 50,
+      "id": 4,
+      "negative": "Ethereum symbols, fiat currency, centralized banking, realistic photos, blurry images, bearish trends",
+      "keywords": "Cartoon sticker, Detailed animation,Gold,Bitcoin logo dominance, BTC symbol, cryptocurrency coin, blockchain structure, mining concept illustration, animated network connections, no background, transparent, vibrant orange and gold scheme, digital wallet visualization, halving event depiction, Lightning Network concept, bullish trend chart",
+      "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837804/bqmtrtvckxfqf4sad6aq.jpg",
+      "altText": "Bitcoin Cryptocurrency Sticker Pack"
+    }
   ];
+
 
   try {
     for (const pack of nftData) {
