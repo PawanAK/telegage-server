@@ -316,7 +316,7 @@ app.post('/api/community-stats', async (req, res) => {
     // Attempt to connect to MongoDB
     const client = new MongoClient('mongodb+srv://pawanajjark:y5A6YsqwwYrQhckO@cluster0.lixwl.mongodb.net/telegram_communities?retryWrites=true&w=majority', {
       serverSelectionTimeoutMS: 5000, // 5 second timeout
-      useNewUrlParser: true,
+      useNewUrlParser: true,  
       useUnifiedTopology: true,
     });
 
@@ -360,6 +360,32 @@ app.post('/api/community-stats', async (req, res) => {
       error: error.message,
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
+  }
+});
+
+app.post('/api/create-nft-pack', async (req, res) => {
+  try {
+    console.log("Server - Received NFT Pack data:", JSON.stringify(req.body, null, 2));
+    const { title, price, negative, keywords, imageUrl, altText } = req.body;
+    if (!title || !price) {
+      console.log("Missing required fields");
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    const newNFTPack = new NFTPack({
+      title,
+      price,
+      id: Date.now(), // Generate a unique ID
+      negative,
+      keywords,
+      imageUrl,
+      altText
+    });
+    console.log("New NFT Pack:", JSON.stringify(newNFTPack, null, 2));
+    await newNFTPack.save();
+    res.status(201).json({ message: 'NFT Pack created successfully', nftPack: newNFTPack });
+  } catch (error) {
+    console.error("Error creating NFT Pack:", error);
+    res.status(500).json({ message: 'Error creating NFT Pack', error: error.message });
   }
 });
 
