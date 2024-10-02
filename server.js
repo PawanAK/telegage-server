@@ -63,8 +63,8 @@ const NFTPackSchema = new mongoose.Schema({
   negative: { type: String },
   keywords: { type: String },
   imageUrl: { type: String },
-  altText: { type: String }
-  
+  altText: { type: String },
+  community_id: { type: String }
 });
 
 const NFTPack = testConnection.model('NFTPack', NFTPackSchema);
@@ -386,7 +386,7 @@ app.post('/api/community-stats', async (req, res) => {
 app.post('/api/create-nft-pack', async (req, res) => {
   try {
     console.log("Server - Received NFT Pack data:", JSON.stringify(req.body, null, 2));
-    const { title, price, negative, keywords, imageUrl, altText } = req.body;
+    const { title, price, negative, keywords, imageUrl, altText, community_id } = req.body;
     if (!title || !price) {
       console.log("Missing required fields");
       return res.status(400).json({ message: 'Missing required fields' });
@@ -398,7 +398,8 @@ app.post('/api/create-nft-pack', async (req, res) => {
       negative,
       keywords,
       imageUrl,
-      altText
+      altText,
+      community_id
     });
     console.log("New NFT Pack:", JSON.stringify(newNFTPack, null, 2));
     await newNFTPack.save();
@@ -409,75 +410,75 @@ app.post('/api/create-nft-pack', async (req, res) => {
   }
 });
 
-// Initialize NFT Packs
-async function initializeNFTPacks() {
-  const nftData = [
-    { 
-      title: "Good Pack", 
-      price: 50, 
-      id: 1, 
-      negative: "Evil Expression, Scowl, Frown, No beard,Sarcastic Smile,blurry images", 
-      keywords: "Cartoon, Exagerated,Handsome, Beautiful, Detailed Animation, Animated, No Background, Black Background, Happy, Long hair, Always bearded",
-      imageUrl: "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837797/copsdqwxvevwbkvll2hy.jpg",
-      altText: "Good Pack NFT"
-    },
-    { 
-      title: "Evil Pack", 
-      price: 50, 
-      id: 2, 
-      negative: "Good Expression, Smile, blurry images", 
-      keywords: "Evil ,Cartoon, Exagerated,Handsome, Beautiful, Detailed Animation, Animated, No Background, Black Background, Happy, Long hair, Always bearded, Sarcastic smile",
-      imageUrl: "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837806/qhyaseccdm25i8zhqsc8.jpg",
-      altText: "Evil Pack NFT"
-    },
-    {
-      "title": "Prince Pack",
-      "price": 50,
-      "id": 5,
-      "negative": "Princess elements, feminine features, blurry images, realistic, photograph",
-      "keywords": "Cartoon sticker, handsome prince character, royal attire, crown, sword, noble pose, charming smile, detailed 2D animation style, fairytale castle background, no background option, transparent, vibrant colors, heroic gestures, majestic aura",
-      "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/azbycespmcz7szyralcm.jpg",
-      "altText": "Prince Pack NFT Sticker"
-    },
-    {
-      "title": "Princess Pack",
-      "price": 50,
-      "id": 6,
-      "negative": "Prince elements, masculine features, blurry images, realistic, photograph",
-      "keywords": "Cartoon sticker, beautiful princess character, elegant gown, tiara, graceful pose, enchanting smile, detailed 2D animation style, fairytale castle background, no background option, transparent, pastel color palette, regal gestures, magical aura",
-      "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/mppucn34tpobdrrhwzc0.jpg",
-      "altText": "Princess Pack NFT Sticker"
-    },
-    {
-      "title": "Ethereum Pack",
-      "price": 50,
-      "id": 3,
-      "negative": "Bitcoin symbols, fiat currency, centralized systems, realistic photos, blurry images, confusion",
-      "keywords": "Cartoon sticker, Ethereum logo prominence, Black and White ,ETH symbol, cryptocurrency coin, blockchain visualization, smart contract illustration, decentralized network, animated ether particles, no background, transparent, vibrant blue and white palette, futuristic tech aesthetic, DeFi ecosystem symbols, gas fee representation, Ethereum 2.0 concept",
-      "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837803/jcqlnfvtjsvzlah4filf.jpg",
-      "altText": "Ethereum Cryptocurrency Sticker Pack"
-    },
-    {
-      "title": "Bitcoin Pack",
-      "price": 50,
-      "id": 4,
-      "negative": "Ethereum symbols, fiat currency, centralized banking, realistic photos, blurry images, bearish trends",
-      "keywords": "Cartoon sticker, Detailed animation,Gold,Bitcoin logo dominance, BTC symbol, cryptocurrency coin, blockchain structure, mining concept illustration, animated network connections, no background, transparent, vibrant orange and gold scheme, digital wallet visualization, halving event depiction, Lightning Network concept, bullish trend chart",
-      "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837804/bqmtrtvckxfqf4sad6aq.jpg",
-      "altText": "Bitcoin Cryptocurrency Sticker Pack"
-    }
-  ];
+// // Initialize NFT Packs
+// async function initializeNFTPacks() {
+//   const nftData = [
+//     { 
+//       title: "Good Pack", 
+//       price: 50, 
+//       id: 1, 
+//       negative: "Evil Expression, Scowl, Frown, No beard,Sarcastic Smile,blurry images", 
+//       keywords: "Cartoon, Exagerated,Handsome, Beautiful, Detailed Animation, Animated, No Background, Black Background, Happy, Long hair, Always bearded",
+//       imageUrl: "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837797/copsdqwxvevwbkvll2hy.jpg",
+//       altText: "Good Pack NFT"
+//     },
+//     { 
+//       title: "Evil Pack", 
+//       price: 50, 
+//       id: 2, 
+//       negative: "Good Expression, Smile, blurry images", 
+//       keywords: "Evil ,Cartoon, Exagerated,Handsome, Beautiful, Detailed Animation, Animated, No Background, Black Background, Happy, Long hair, Always bearded, Sarcastic smile",
+//       imageUrl: "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837806/qhyaseccdm25i8zhqsc8.jpg",
+//       altText: "Evil Pack NFT"
+//     },
+//     {
+//       "title": "Prince Pack",
+//       "price": 50,
+//       "id": 5,
+//       "negative": "Princess elements, feminine features, blurry images, realistic, photograph",
+//       "keywords": "Cartoon sticker, handsome prince character, royal attire, crown, sword, noble pose, charming smile, detailed 2D animation style, fairytale castle background, no background option, transparent, vibrant colors, heroic gestures, majestic aura",
+//       "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/azbycespmcz7szyralcm.jpg",
+//       "altText": "Prince Pack NFT Sticker"
+//     },
+//     {
+//       "title": "Princess Pack",
+//       "price": 50,
+//       "id": 6,
+//       "negative": "Prince elements, masculine features, blurry images, realistic, photograph",
+//       "keywords": "Cartoon sticker, beautiful princess character, elegant gown, tiara, graceful pose, enchanting smile, detailed 2D animation style, fairytale castle background, no background option, transparent, pastel color palette, regal gestures, magical aura",
+//       "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724932864/mppucn34tpobdrrhwzc0.jpg",
+//       "altText": "Princess Pack NFT Sticker"
+//     },
+//     {
+//       "title": "Ethereum Pack",
+//       "price": 50,
+//       "id": 3,
+//       "negative": "Bitcoin symbols, fiat currency, centralized systems, realistic photos, blurry images, confusion",
+//       "keywords": "Cartoon sticker, Ethereum logo prominence, Black and White ,ETH symbol, cryptocurrency coin, blockchain visualization, smart contract illustration, decentralized network, animated ether particles, no background, transparent, vibrant blue and white palette, futuristic tech aesthetic, DeFi ecosystem symbols, gas fee representation, Ethereum 2.0 concept",
+//       "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837803/jcqlnfvtjsvzlah4filf.jpg",
+//       "altText": "Ethereum Cryptocurrency Sticker Pack"
+//     },
+//     {
+//       "title": "Bitcoin Pack",
+//       "price": 50,
+//       "id": 4,
+//       "negative": "Ethereum symbols, fiat currency, centralized banking, realistic photos, blurry images, bearish trends",
+//       "keywords": "Cartoon sticker, Detailed animation,Gold,Bitcoin logo dominance, BTC symbol, cryptocurrency coin, blockchain structure, mining concept illustration, animated network connections, no background, transparent, vibrant orange and gold scheme, digital wallet visualization, halving event depiction, Lightning Network concept, bullish trend chart",
+//       "imageUrl": "https://res.cloudinary.com/dkewhgebd/image/upload/v1724837804/bqmtrtvckxfqf4sad6aq.jpg",
+//       "altText": "Bitcoin Cryptocurrency Sticker Pack"
+//     }
+//   ];
 
 
-  try {
-    for (const pack of nftData) {
-      await NFTPack.findOneAndUpdate({ id: pack.id }, pack, { upsert: true, new: true });
-    }
-    console.log("NFT Packs initialized successfully");
-  } catch (error) {
-    console.error("Error initializing NFT Packs:", error);
-  }
-}
+//   try {
+//     for (const pack of nftData) {
+//       await NFTPack.findOneAndUpdate({ id: pack.id }, pack, { upsert: true, new: true });
+//     }
+//     console.log("NFT Packs initialized successfully");
+//   } catch (error) {
+//     console.error("Error initializing NFT Packs:", error);
+//   }
+// }
 
 // Connect to MongoDB and start the server
 Promise.all([
@@ -486,7 +487,6 @@ Promise.all([
 ])
   .then(() => {
     console.log('Connected to MongoDB Atlas (telegram_communities and test databases)');
-    initializeNFTPacks(); // Initialize NFT Packs after connecting to MongoDB
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
