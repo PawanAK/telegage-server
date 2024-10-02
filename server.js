@@ -410,6 +410,21 @@ app.post('/api/create-nft-pack', async (req, res) => {
   }
 });
 
+app.post('/api/nft-packs', async (req, res) => {
+  try {
+    const { communityId } = req.body;
+    if (!communityId) {
+      return res.status(400).json({ message: 'Community ID is required' });
+    }
+    // Ensure communityId is treated as a string
+    const nftPacks = await NFTPack.find({ community_id: communityId.toString() });
+    res.json(nftPacks);
+  } catch (error) {
+    console.error("Error fetching NFT packs for community:", error);
+    res.status(500).json({ message: 'Error fetching NFT packs for community', error: error.message });
+  }
+});
+
 // // Initialize NFT Packs
 // async function initializeNFTPacks() {
 //   const nftData = [
