@@ -64,6 +64,7 @@ const NFTPackSchema = new mongoose.Schema({
   keywords: { type: String },
   imageUrl: { type: String },
   altText: { type: String }
+  
 });
 
 const NFTPack = testConnection.model('NFTPack', NFTPackSchema);
@@ -164,10 +165,29 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Fetch NFT Packs route
-app.get('/api/nft-packs', async (req, res) => {
-  try {
-    const nftPacks = await NFTPack.find();
-    res.json(nftPacks);
+// app.get('/api/nft-packs', async (req, res) => {
+//   try {
+//     const nftPacks = await NFTPack.find();
+//     res.json(nftPacks);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching NFT packs', error: error.message });
+//     console.error("Error fetching NFT packs", error);
+//   }
+// });
+
+app.get('/api/nft-superpacks', async (req, res) => {
+  try { 
+    const client = new MongoClient("mongodb+srv://pawanajjark:y5A6YsqwwYrQhckO@cluster0.lixwl.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  await client.connect();
+
+  const coll = client.db('test').collection('superpack');
+  const cursor = coll.find({});
+  const nftPacks = await cursor.toArray();
+  res.json(nftPacks);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching NFT packs', error: error.message });
     console.error("Error fetching NFT packs", error);
